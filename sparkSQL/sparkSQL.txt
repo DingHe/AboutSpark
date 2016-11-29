@@ -1,0 +1,93 @@
+Using Sparksql IN Applications:
+1. If you are building Spark from source, you should run sbt/sbt-Phive assembly
+2. As with the other Spark libraries, in Python no changes to your build are required
+3.The recommended entry point:
+HiveContext
+SQLContext
+4. to connect Spark SQL to an existing Hive installation, you must copy your hivesite.xml file to Spark’s configuration directory 
+5.Note that if you don’t have an existing Hive installation, Spark SQL will create its own
+Hive metastore (metadata DB) in your program’s work directory
+6.SchemaRDD is an RDD composed of Row objects with additional schema information of the types in each column
+7.You can also cache tables using HiveQL/SQL statements. To cache or uncache a table
+simply run CACHE TABLE tableName or UNCACHE TABLE tableName
+
+
+Loading and Saving Data:
+1.Apache Hive
+To connect Spark SQL to an existing Hive installation, you need to provide a Hive
+configuration. You do so by copying your hive-site.xml file to Spark’s ./conf/ directory
+
+2.parquet
+3.json
+4.from rdds
+
+jdbc/odbc server:
+The server can be launched with sbin/start-thriftserver.sh in your Spark directory
+By default it listens on localhost:10000, but we can change these with either environment variables
+(HIVE_SERVER2_THRIFT_PORT and HIVE_SERVER2_THRIFT_BIND_HOST)
+or with Hive configuration properties (hive.server2.thrift.port and hive.server2.thrift.bind.host)
+
+server
+./sbin/start-thriftserver.sh —master sparkMast
+
+client
+./bin/beeline -u jdbc:hive2://localhost:10000
+
+most BI tools that have connectors to Hive can also connect to Spark SQL using their existing Hive connector, because it uses the same
+query language and server
+
+
+Standalone Spark SQL Shell:
+./bin/spark-sql
+
+
+User-Defined Functions:
+registerFunction(“strLenScala”, (_: String).length)
+val tweetLength = hiveCtx.sql(“SELECT strLenScala(‘tweet’) FROM tweets LIMIT 10”)
+
+
+
+import sqlContext.implicits._
+For instance, using the previous implicits call, allows you to import a CSV fle and
+split it by separator characters. It can then convert the RDD that contains the data
+into a data frame using the toDF method.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
