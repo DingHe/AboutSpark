@@ -2,9 +2,12 @@ package com.zzx.sample
 
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
+import java.io.UnsupportedEncodingException
+import java.net.URLEncoder
+import java.net.URLDecoder
 
 object Check4GData {
-  
+  val ENCODE = "utf-8";
   
   def main(args: Array[String]): Unit = {
     //spark-shell --master yarn --name Check4GData --driver-memory 10g --executor-memory 2g  --executor-cores 2  --num-executors 20
@@ -31,5 +34,37 @@ object Check4GData {
     val len63Conext=lenAndcontext.map{case(len,conext) => if(len == 63) conext}
     len63Conext.saveAsTextFile("/user/spark/4gresult")
     
+    
+    //检查URL信息
+    val fields=data.map { _.split("\\|")}.filter { _.length == 90 }
+    val ContentTypeAndURL=fields.map{x => (x(66),x(62))}
+    val decoderURL=ContentTypeAndURL.filter(_._1.toLowerCase == "application/x-www-form-urlencoded").map{case (contentType,url) => getURLDecoderString(url)}
+    val containHotel=decoderURL.filter { _.contains("宾馆") }
+    decoderURL.saveAsTextFile("/user/spark/4gresult")
+    
   }
+  
+  def getURLDecoderString(str:String):String={
+    var result=""
+    if(null == str) return result
+    try{
+      result = URLDecoder.decode(str.replaceAll("%", "%25"),ENCODE)
+    }catch{
+      case ex : UnsupportedEncodingException => {ex.printStackTrace()}
+    }
+    result
+  }
+  
+  def getURLEncoderString(str:String):String={
+    var result=""
+    if(null == str) return result
+    try{
+      result=URLEncoder.encode(str,ENCODE )
+    }catch{
+      case e:UnsupportedEncodingException => {e.printStackTrace()}
+    }
+    result
+  }
+  
+  
 }
