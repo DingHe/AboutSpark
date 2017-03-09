@@ -26,8 +26,10 @@ object getURLContent {
 //     val DomainName=DestinationURL.map { x => (pattern.findFirstIn(x),x) }.filter{! _._1.isEmpty}.map{case Tuple2(a,b) => b}.repartition(10)
 //   
 //    DomainName.saveAsTextFile("/user/spark/4gresult")
-
-      runGetWeixinNames()
+    
+    val x="""https://wenzhi.api.qcloud.com/v2/index.php?Action=LexicalAnalysis&Nonce=345122&Region=sz&SecretId=AKIDVt670lqQL4au324Rq282kGa3LQJLGzW6&Timestamp=1408704141&Signature=lNn13tWzFJAqLWWJuJVYR8ct31nMjuRo&text=我爱洗澡&code=2097152"""
+    
+    print(Source.fromURL(x,"utf-8").mkString(""))
     
   }
   

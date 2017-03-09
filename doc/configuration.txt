@@ -1,0 +1,2 @@
+HDFS已经上传的文件修改备份的数量：
+hadoop fs -setrep -R 2 /
