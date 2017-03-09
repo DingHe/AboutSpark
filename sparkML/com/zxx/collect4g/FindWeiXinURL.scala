@@ -11,6 +11,7 @@ object FindWeiXinURL {
          //spark-shell --master yarn --name FindWeiXinURL --driver-memory 10g  --jars ./HbaseIO.jar --executor-memory 2g  --executor-cores 2  --num-executors 20
     val path="/user/hive/warehouse/hnlyw.db/t_4gphone_webbrowser/20170221*/"
     val sc=new SparkContext(new SparkConf().setMaster("local[4]").setAppName("getURLContent"))
+    
     val data=sc.textFile(path)
     val fields=data.map{ _.split("\\|")}.filter(_.length == 21)
     val DestinationURL=fields.map { x => (x(1)+"-"+x(11),x(16))}

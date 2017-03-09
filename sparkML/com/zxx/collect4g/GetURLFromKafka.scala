@@ -12,14 +12,14 @@ import org.apache.spark.api.java.function._
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.api._
 
-//spark-shell --master yarn --conf "spark.dynamicAllocation.enabled=false"
+//spark-shell --master yarn --conf "spark.dynamicAllocation.enabled=false"  --conf "spark.scheduler.pool=default"
 object GetURLFromKafka {
   //匹配微信公众号的正则表达式
   val pattern = """http://mp.weixin.qq.com""".r
   //url结果存储路径
   val path="/user/spark/weixin"
   val kafka="172.16.5.117:2181,172.16.5.118:2181,172.16.5.119:2181/kaflume"
-  val g="newg"
+  val g="bbbb"
   val t=Map("4g" -> 3)
   
   
@@ -33,7 +33,10 @@ object GetURLFromKafka {
     val Array(zkQuorum,group,topics,numThreads) = args
     val sc=new SparkConf().setAppName("GetURLFromKafka")
     //val ssc=new StreamingContext(sparkConf,Seconds(30))
+    //sc.setLocalProperty("spark.scheduler.pool", "default")
     val ssc=new StreamingContext(sc,Seconds(60))
+    
+  
     val topicMap=topics.split(",").map((_,numThreads.toInt )).toMap
    // val lines=KafkaUtils.createStream(ssc, zkQuorum, group, topicMap, StorageLevel.MEMORY_ONLY).map(_._2)
      val lines=KafkaUtils.createStream(ssc, kafka, g, t, StorageLevel.MEMORY_AND_DISK_SER).map(_._2)
