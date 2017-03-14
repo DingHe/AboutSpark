@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.hive.HiveContext
-
+//spark-shell --master yarn --conf "spark.dynamicAllocation.enabled=true"  --conf "spark.yarn.queue=zzx"
 object haw {
    //判断是否是工作日
     def isWeekday(date : String) : Boolean = {
@@ -47,7 +47,7 @@ object haw {
   
   def main(args: Array[String]): Unit = {
     val hivesql="select a.mdn,a.datestr,a.ci,b.longitude,b.latitude,a.province from hnlyw.t_phone_attribution a join hnlyw.t_ci_lng_lat_distance b on a.ci=b.ci  where a.dt >='20170201' and a.dt <='20170301'"
-    val sc=new SparkContext(new SparkConf().setMaster("local[4]").setAppName("haw"))
+    //val sc=new SparkContext(new SparkConf().setMaster("local[4]").setAppName("haw"))
     val sqlContext=new HiveContext(sc)
     val data = sqlContext.sql(hivesql)
     val rdd=data.rdd
