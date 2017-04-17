@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.hive.HiveContext
-//spark-shell --master yarn --conf "spark.dynamicAllocation.enabled=true"  --conf "spark.yarn.queue=zzx"
+//spark-shell --master yarn --conf "spark.dynamicAllocation.enabled=true"  --conf "spark.yarn.queue=byy"
 object haw {
    //判断是否是工作日
     def isWeekday(date : String) : Boolean = {
@@ -55,8 +55,8 @@ object haw {
     val rddstr=rdd.map(_.mkString(","))
     val home=GetUserHomeByFreq(rddstr).repartition(5)
     val work=GetUserWorkByFreq(rddstr).repartition(5)
-    home.saveAsTextFile("/user/spark/home")
-    work.saveAsTextFile("/user/spark/work")
+    home.saveAsTextFile("/user/spark/home1")
+    work.saveAsTextFile("/user/spark/work1")
     
     
     
